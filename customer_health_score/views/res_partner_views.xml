@@ -95,13 +95,13 @@
                 <field name="health_state"/>
             </xpath>
 
-            <xpath expr="//div[hasclass('oe_kanban_details')]/ul" position="inside">
-                <li class="mt-1">
+            <xpath expr="//div[hasclass('oe_kanban_details')]" position="inside">
+                <div class="mt-1">
                     <field name="health_state" widget="badge"
                         decoration-danger="health_state == 'critical'"
                         decoration-warning="health_state == 'at_risk'"
                         decoration-success="health_state == 'healthy'"/>
-                </li>
+                </div>
             </xpath>
         </field>
     </record>
