@@ -95,7 +95,7 @@
                 <field name="health_state"/>
             </xpath>
 
-            <xpath expr="//div[hasclass('o_kanban_record_subtitle')]" position="after">
+            <xpath expr="//templates//field[@name='display_name']" position="after">
                 <div class="mt-1">
                     <field name="health_state" widget="badge"
                         decoration-danger="health_state == 'critical'"
