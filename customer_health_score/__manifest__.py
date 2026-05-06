@@ -3,7 +3,7 @@
 {
 
     'name': 'Health Score',
-    'version': '1.0',
+    'version': '1.1',
     'summary': 'A simple tool to manage Customer Health Score.',
     'sequence': 2,
     'description':"""

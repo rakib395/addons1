@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Form View Inheritance -->
+    <odoo>
     <record id="view_partner_form_health_score" model="ir.ui.view">
         <field name="name">res.partner.form.health.score</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-        
-            <!-- Gauge widget for main health score -->
-            <xpath expr="//field[@name='category_id']" position="after">
-                <group name="health_summary" string="Customer Health Summary">
-                    <label for="health_score" string="Overall Health Score"/>
-                    <div class="o_row">
-                        <field name="health_score" widget="gauge" options="{'max_value': 100}"/>
-                        <field name="health_state" widget="badge" 
-                            decoration-danger="health_state == 'critical'" 
-                            decoration-warning="health_state == 'at_risk'" 
-                            decoration-success="health_state == 'healthy'"/>
-                    </div>
-                    <field name="last_health_compute"/>
-                </group>
-            </xpath>
-
-    
-            <xpath expr="//notebook" position="inside">
-                <page string="Health Score Details" name="health_details">
-                    <group>
-                        <group string="Sub-Score Breakdown">
-                            <field name="order_frequency_score" widget="progressbar"/>
-                            <field name="payment_behavior_score" widget="progressbar"/>
-                            <field name="revenue_trend_score" widget="progressbar"/>
-                        </group>
-                    </group>
-                </page>
-            </xpath>
+            <data>
+                <xpath expr="//notebook" position="inside">
+                    <page string="Health Score Details" name="health_details">
+                        <div class="row mt-3">
+                            <div class="col-md-5 border-end text-center">
+                                <group string="Overall Status">
+                                    <div class="o_row d-flex justify-content-center py-2">
+                                        <field name="health_score" widget="gauge" options="{'max_value': 100, 'style': 'width:160px; height: 120px;'}"/>
+                                    </div>
+                                    <div class="mt-2">
+                                        <field name="health_state" widget="badge" 
+                                               decoration-danger="health_state == 'critical'" 
+                                               decoration-warning="health_state == 'at_risk'" 
+                                               decoration-success="health_state == 'healthy'"/>
+                                    </div>
+                                    <div class="text-muted small mt-3">
+                                        <strong>Last Update:</strong> <field name="last_health_compute" nolabel="1"/>
+                                    </div>
+                                </group>
+                            </div>
+                            <div class="col-md-7">
+                                <group string="Scoring Factors">
+                                    <field name="order_frequency_score" widget="progressbar" string="Order Frequency"/>
+                                    <field name="payment_behavior_score" widget="progressbar" string="Payment Behavior"/>
+                                    <field name="revenue_trend_score" widget="progressbar" string="Revenue Trend"/>
+                                </group>
+                            </div>
+                        </div>
+                    </page>
+                </xpath>
+            </data>
         </field>
     </record>
 
