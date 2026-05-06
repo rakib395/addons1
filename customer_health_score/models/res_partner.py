@@ -7,7 +7,7 @@ class ResPartner(models.Model):
     order_frequency_score = fields.Float(string="Order Frequency Score", compute="_compute_sub_scores", store=True)
     payment_behavior_score = fields.Float(string="Payment Behavior Score", compute="_compute_sub_scores", store=True)
     revenue_trend_score = fields.Float(string="Revenue Trend Score", compute="_compute_sub_scores", store=True)
-    health_score = fields.Float(string="Health Score", compute="_compute_health_score", store=True)
+    health_score = fields.Float(string="Rating", compute="_compute_health_score", store=True)
     last_health_compute = fields.Datetime(string="Last Health Update", readonly=True)
 
     health_state = fields.Selection([
