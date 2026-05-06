@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Form View Inheritance -->
-     <record id="view_partner_form_health_score" model="ir.ui.view">
+    <record id="view_partner_form_health_score" model="ir.ui.view">
         <field name="name">res.partner.form.health.score</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
@@ -10,25 +10,29 @@
                 <xpath expr="//notebook" position="inside">
                     <page string="Health Score Details" name="health_details">
                         <div class="row mt-3">
-                            <div class="col-md-5 border-end text-center">
-                                <group string="Overall Status">
-                                    <div class="o_row d-flex justify-content-center py-2">
-                                        <field name="health_score" widget="gauge" options="{'max_value': 100, 'style': 'width:160px; height: 120px;'}"/>
-                                    </div>
-                                    <div class="mt-2">
-                                        <field name="health_state" widget="badge" 
-                                               decoration-danger="health_state == 'critical'" 
-                                               decoration-warning="health_state == 'at_risk'" 
-                                               decoration-success="health_state == 'healthy'"/>
-                                    </div>
-                                    <div class="mt-4 text-start border-top pt-2" style="width: fit-content; margin-left: auto; margin-right: auto;">
-                                        <span class="text-muted fw-bold">Last Update:</span>
-                                        <span class="ms-1 text-primary">
-                                            <field name="last_health_compute" nolabel="1"/>
-                                        </span>
-                                    </div>
-                                </group>
+                            <div class="col-md-5 border-end text-center d-flex flex-column align-items-center justify-content-start">
+                                <h3 class="fw-bold text-dark mt-2 mb-0">Health Score</h3>
+                                
+                                <div class="py-2" style="min-height: 140px;">
+                                    <field name="health_score" widget="gauge" options="{'max_value': 100, 'style': 'width:180px; height: 140px;'}"/>
+                                </div>
+
+                                <div class="mb-3">
+                                    <field name="health_state" widget="badge" 
+                                        decoration-danger="health_state == 'critical'" 
+                                        decoration-warning="health_state == 'at_risk'" 
+                                        decoration-success="health_state == 'healthy'"/>
+                                </div>
+
+                                <div class="mt-auto py-2 border-top w-75">
+                                    <small class="text-muted d-block">
+                                        <i class="fa fa-clock-o me-1"/> 
+                                        <strong>Last Update:</strong> 
+                                        <field name="last_health_compute" nolabel="1"/>
+                                    </small>
+                                </div>
                             </div>
+
                             <div class="col-md-7">
                                 <group string="Scoring Factors">
                                     <field name="order_frequency_score" widget="progressbar" string="Order Frequency"/>
