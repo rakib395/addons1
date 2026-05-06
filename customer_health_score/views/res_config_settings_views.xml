@@ -35,10 +35,6 @@
                                     <label for="x_payment_weight" class="col-lg-4 o_light_label"/>
                                     <field name="x_payment_weight"/>
                                 </div>
-                                <div class="row">
-                                    <label for="x_revenue_weight" class="col-lg-4 o_light_label"/>
-                                    <field name="x_revenue_weight"/>
-                                </div>
                             </div>
                         </setting>
                     </block>

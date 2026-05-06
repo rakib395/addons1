@@ -10,7 +10,6 @@ class ResConfigSettings(models.TransientModel):
     # Weights 
     x_order_weight = fields.Float(string="Order Frequency Weight (%)", config_parameter='customer_health.x_order_weight', default=40.0)
     x_payment_weight = fields.Float(string="Payment Behavior Weight (%)", config_parameter='customer_health.x_payment_weight', default=35.0)
-    x_revenue_weight = fields.Float(string="Revenue Trend Weight (%)", config_parameter='customer_health.x_revenue_weight', default=25.0)
 
     def set_values(self):
         super(ResConfigSettings, self).set_values()

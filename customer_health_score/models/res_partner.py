@@ -6,7 +6,6 @@ class ResPartner(models.Model):
 
     order_frequency_score = fields.Float(string="Order Frequency Score", compute="_compute_sub_scores", store=True)
     payment_behavior_score = fields.Float(string="Payment Behavior Score", compute="_compute_sub_scores", store=True)
-    revenue_trend_score = fields.Float(string="Revenue Trend Score", compute="_compute_sub_scores", store=True)
     health_score = fields.Float(string="Rating", compute="_compute_health_score", store=True)
     last_health_compute = fields.Datetime(string="Last Health Update", readonly=True)
 
@@ -35,22 +34,17 @@ class ResPartner(models.Model):
             else:
                 partner.payment_behavior_score = 100 if not overdue_invoices else 30
 
-            # Revenue Trend
-            total_revenue = sum(partner.invoice_ids.mapped('amount_total'))
-            partner.revenue_trend_score = min((total_revenue / 5000) * 10, 100) if total_revenue > 0 else 0
 
-    @api.depends('order_frequency_score', 'payment_behavior_score', 'revenue_trend_score')
+    @api.depends('order_frequency_score', 'payment_behavior_score')
     def _compute_health_score(self):
         icp = self.env['ir.config_parameter'].sudo()
         w_order = float(icp.get_param('customer_health.x_order_weight') or 40.0)
         w_payment = float(icp.get_param('customer_health.x_payment_weight') or 35.0)
-        w_revenue = float(icp.get_param('customer_health.x_revenue_weight') or 25.0)
 
         for partner in self:
             total_score = (
                 (partner.order_frequency_score * (w_order / 100)) +
-                (partner.payment_behavior_score * (w_payment / 100)) +
-                (partner.revenue_trend_score * (w_revenue / 100))
+                (partner.payment_behavior_score * (w_payment / 100)) 
             )
             partner.health_score = total_score
 

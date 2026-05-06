@@ -37,7 +37,6 @@
                                 <group string="Scoring Factors">
                                     <field name="order_frequency_score" widget="progressbar" string="Order Frequency"/>
                                     <field name="payment_behavior_score" widget="progressbar" string="Payment Behavior"/>
-                                    <field name="revenue_trend_score" widget="progressbar" string="Revenue Trend"/>
                                 </group>
                             </div>
                         </div>
