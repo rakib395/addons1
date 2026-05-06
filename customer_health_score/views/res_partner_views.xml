@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Form View Inheritance -->
-    <odoo>
-    <record id="view_partner_form_health_score" model="ir.ui.view">
+     <record id="view_partner_form_health_score" model="ir.ui.view">
         <field name="name">res.partner.form.health.score</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
