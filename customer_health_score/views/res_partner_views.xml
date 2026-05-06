@@ -81,12 +81,12 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.res_partner_kanban_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[hasclass('oe_kanban_details')]/strong[1]" position="after">
+            <xpath expr="//strong[1]" position="after">
                 <div class="mt-1">
                     <field name="health_state" widget="badge" 
-                           decoration-danger="health_state == 'critical'" 
-                           decoration-warning="health_state == 'at_risk'" 
-                           decoration-success="health_state == 'healthy'"/>
+                        decoration-danger="health_state == 'critical'" 
+                        decoration-warning="health_state == 'at_risk'" 
+                        decoration-success="health_state == 'healthy'"/>
                 </div>
             </xpath>         
         </field>
