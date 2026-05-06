@@ -86,7 +86,7 @@
     </record>
 
     <!-- Kanban View Inheritance -->
-    <record id="view_partner_kanban_health_score" model="ir.ui.view">
+   <record id="view_partner_kanban_health_score" model="ir.ui.view">
         <field name="name">res.partner.kanban.health.score</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.res_partner_kanban_view"/>
@@ -95,7 +95,7 @@
                 <field name="health_state"/>
             </xpath>
 
-            <xpath expr="//div[hasclass('oe_kanban_content') or hasclass('o_kanban_record_body')]" position="inside">
+            <xpath expr="//div[hasclass('o_kanban_record_subtitle')]" position="after">
                 <div class="mt-1">
                     <field name="health_state" widget="badge"
                         decoration-danger="health_state == 'critical'"
@@ -105,5 +105,5 @@
             </xpath>
         </field>
     </record>
- 
+    
 </odoo>
