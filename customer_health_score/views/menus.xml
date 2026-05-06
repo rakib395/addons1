@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_customer_health_config" model="ir.actions.act_window">
+        <field name="name">Customer Health Settings</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'customer_health'}</field>
+    </record>
+
+
+    <menuitem id="menu_customer_health_config"
+              name="Customer Health"
+              parent="base.menu_administration"
+              action="action_customer_health_config"
+              sequence="100"/>
+</odoo>
