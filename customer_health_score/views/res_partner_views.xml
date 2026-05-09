@@ -35,31 +35,9 @@
 
                             <div class="col-md-7">
                                 <group string="Scoring Factors">
-    
-                                    <label for="order_frequency_score" string="Order Frequency"/>
-                                    <div class="o_row">
-                                        <field name="order_frequency_score" widget="progressbar" nolabel="1"/>
-                                        <field name="order_frequency_score_text" class="fw-bold text-info ml-2"/>
-                                    </div>
-
-                                    
-                                    <label for="payment_behavior_score" string="Payment Behavior"/>
-                                    <div class="o_row">
-                                        <field name="payment_behavior_score" widget="progressbar" nolabel="1"/>
-                                        <field name="payment_behavior_status" widget="badge"
-                                            decoration-success="payment_behavior_status == 'good'"
-                                            decoration-warning="payment_behavior_status == 'average'"
-                                            decoration-danger="payment_behavior_status == 'poor'"/>
-                                        <field name="payment_delay_info" class="fw-bold ml-2"/>
-                                    </div>
-
+                                    <field name="order_frequency_score" widget="progressbar" string="Order Frequency"/>
+                                    <field name="payment_behavior_score" widget="progressbar" string="Payment Behavior"/>
                                 </group>
-
-                                <div class="alert alert-info mt-3" role="alert">
-                                    <i class="fa fa-info-circle me-1"/> 
-                                    These scores are calculated like based on the last <strong>90 days</strong> of activity.
-                                </div>
-
                             </div>
                         </div>
                     </page>

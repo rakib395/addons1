@@ -3,67 +3,62 @@
     <record id="res_config_settings_view_form_health" model="ir.ui.view">
         <field name="name">res.config.settings.view.form.inherit.health</field>
         <field name="model">res.config.settings</field>
-        <field name="priority" eval="25"/>
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//form" position="inside">
-
-                <app data-string="Customer Health" string="Customer Health" name="customer_health">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Customer Health" string="Customer Health" data-key="customer_health_score">
                     
-                    <block title="Analysis Parameters" name="analysis_setting">
-                        <setting string="Time &amp; Gap" help="Set period and expected gap for order analysis">
-                            <div class="content-group">
-                                <div class="row mt16">
-                                    <label for="x_analysis_days" class="col-lg-4 o_light_label"/>
-                                    <field name="x_analysis_days"/>
-                                </div>
-                                <div class="row">
-                                    <label for="x_expected_order_gap" class="col-lg-4 o_light_label"/>
-                                    <field name="x_expected_order_gap"/>
-                                </div>
-                                <div class="row text-muted" invisible="not benchmark_info">
-                                    <div class="col-lg-4">Current Benchmark:</div>
-                                    <div class="col-lg-8"><field name="benchmark_info" readonly="1"/></div>
-                                </div>
-                            </div>
-                        </setting>
-                    </block>
-
-                    <block title="Score Thresholds" name="thresholds_setting">
-                        <setting string="Status Limits" help="Define health status boundaries">
-                            <div class="content-group">
-                                <div class="row mt16">
-                                    <label for="x_healthy_threshold" class="col-lg-4 o_light_label"/>
-                                    <field name="x_healthy_threshold"/>
-                                </div>
-                                <div class="row">
-                                    <label for="x_critical_threshold" class="col-lg-4 o_light_label"/>
-                                    <field name="x_critical_threshold"/>
+                    <h2 class="mt16">Score Thresholds</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <div class="content-group">
+                                    <div class="row">
+                                        <label for="x_healthy_threshold" class="col-lg-4 o_light_label"/>
+                                        <field name="x_healthy_threshold" class="col-lg-2"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="x_critical_threshold" class="col-lg-4 o_light_label"/>
+                                        <field name="x_critical_threshold" class="col-lg-2"/>
+                                    </div>
                                 </div>
                             </div>
-                        </setting>
-                    </block>
+                        </div>
+                    </div>
 
-                    <block title="Calculation Weights (%)" name="weights_setting">
-                        <setting string="Factor Weights" help="Importance of each score in final rating">
-                            <div class="content-group">
-                                <div class="row mt16">
-                                    <label for="x_order_weight" class="col-lg-4 o_light_label"/>
-                                    <field name="x_order_weight"/>
-                                </div>
-                                <div class="row">
-                                    <label for="x_payment_weight" class="col-lg-4 o_light_label"/>
-                                    <field name="x_payment_weight"/>
+                    <h2 class="mt16">Calculation Weights (%)</h2>
+                    <div class="row mt16 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <div class="content-group">
+                                    <div class="row">
+                                        <label for="x_order_weight" class="col-lg-4 o_light_label"/>
+                                        <field name="x_order_weight" class="col-lg-2"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="x_payment_weight" class="col-lg-4 o_light_label"/>
+                                        <field name="x_payment_weight" class="col-lg-2"/>
+                                    </div>
+                                    <div class="row">
+                                        <label for="x_revenue_weight" class="col-lg-4 o_light_label"/>
+                                        <field name="x_revenue_weight" class="col-lg-2"/>
+                                    </div>
                                 </div>
                             </div>
-                        </setting>
-                    </block>
-                    
-                </app>
+                        </div>
+                    </div>
 
+                </div>
             </xpath>
         </field>
     </record>
 
-
+    <!-- Settings Menu Action -->
+    <record id="action_customer_health_config" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'customer_health_score'}</field>
+    </record>
 </odoo>
