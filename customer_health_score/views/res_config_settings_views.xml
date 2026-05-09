@@ -7,10 +7,30 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <app data-string="Customer Health" string="Customer Health" name="customer_health_score">
+
+                <app data-string="Customer Health" string="Customer Health" name="customer_health">
                     
+                    <block title="Analysis Parameters" name="analysis_setting">
+                        <setting string="Time &amp; Gap" help="Set period and expected gap for order analysis">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="x_analysis_days" class="col-lg-4 o_light_label"/>
+                                    <field name="x_analysis_days"/>
+                                </div>
+                                <div class="row">
+                                    <label for="x_expected_order_gap" class="col-lg-4 o_light_label"/>
+                                    <field name="x_expected_order_gap"/>
+                                </div>
+                                <div class="row text-muted" invisible="not benchmark_info">
+                                    <div class="col-lg-4">Current Benchmark:</div>
+                                    <div class="col-lg-8"><field name="benchmark_info" readonly="1"/></div>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+
                     <block title="Score Thresholds" name="thresholds_setting">
-                        <setting string="Health Thresholds" help="Define the limits for healthy and critical status">
+                        <setting string="Status Limits" help="Define health status boundaries">
                             <div class="content-group">
                                 <div class="row mt16">
                                     <label for="x_healthy_threshold" class="col-lg-4 o_light_label"/>
@@ -25,7 +45,7 @@
                     </block>
 
                     <block title="Calculation Weights (%)" name="weights_setting">
-                        <setting string="Score Weights" help="Configure how much each factor contributes to the total score">
+                        <setting string="Factor Weights" help="Importance of each score in final rating">
                             <div class="content-group">
                                 <div class="row mt16">
                                     <label for="x_order_weight" class="col-lg-4 o_light_label"/>
@@ -38,18 +58,12 @@
                             </div>
                         </setting>
                     </block>
-
+                    
                 </app>
+
             </xpath>
         </field>
     </record>
 
-    <!-- Settings Menu Action -->
-    <record id="action_customer_health_config" model="ir.actions.act_window">
-        <field name="name">Settings</field>
-        <field name="res_model">res.config.settings</field>
-        <field name="view_mode">form</field>
-        <field name="target">inline</field>
-        <field name="context">{'module' : 'customer_health_score', 'bin_size': False}</field>
-    </record>
+
 </odoo>

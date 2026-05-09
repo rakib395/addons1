@@ -4,8 +4,18 @@ import datetime
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    order_frequency_score = fields.Float(string="Order Frequency Score", compute="_compute_sub_scores", store=True)
+    order_frequency_score = fields.Char(string="Order Frequency Score", compute="_compute_sub_scores", store=True)
+    order_frequency_score_text = fields.Char(string="Order Frequency Info", compute="_compute_sub_scores", store=True)
+
+    payment_behavior_status = fields.Selection([
+        ('good', 'Good'),
+        ('average', 'Average'),
+        ('poor', 'Poor')
+    ], string="Payment Behavior", compute="_compute_sub_scores", store=True)
+
     payment_behavior_score = fields.Float(string="Payment Behavior Score", compute="_compute_sub_scores", store=True)
+    payment_delay_info = fields.Char(string="Payment Delay Details", compute="_compute_sub_scores", store=True)
+
     health_score = fields.Float(string="Rating", compute="_compute_health_score", store=True)
     last_health_compute = fields.Datetime(string="Last Health Update", readonly=True)
 
@@ -17,22 +27,66 @@ class ResPartner(models.Model):
 
     @api.depends('sale_order_ids', 'invoice_ids')
     def _compute_sub_scores(self):
+        icp = self.env['ir.config_parameter'].sudo()
+        days = int(icp.get_param('customer_health.x_analysis_days') or 90)
+        expected_gap = int(icp.get_param('customer_health.x_expected_order_gap') or 30)
+        start_date = fields.Date.today() - datetime.timedelta(days=days)
+
+        good_limit = int(icp.get_param('customer_health.x_payment_good_limit') or 30)
+        avg_limit = int(icp.get_param('customer_health.x_payment_average_limit') or 90)
+
         for partner in self:
 
-            # Order Frequency
-            order_count = len(partner.sale_order_ids)
-            partner.order_frequency_score = min(order_count * 10, 100)
+            # 1. Order Frequency Score
+            orders = partner.sale_order_ids.filtered(
+                lambda s: s.state in ('sale', 'done') and s.date_order.date() >= start_date
+            ).sorted('date_order')
+            
+            if len(orders) > 1:
+                gaps = []
+                for i in range(len(orders) - 1):
+                    gap = (orders[i+1].date_order.date() - orders[i].date_order.date()).days
+                    gaps.append(gap)
+                avg_gap = sum(gaps) / len(gaps)
+                partner.order_frequency_score_text = f"[{int(avg_gap)} Days]"
+                partner.order_frequency_score = max(0, min(100, (expected_gap / avg_gap) * 100)) if avg_gap > 0 else 0
+            else:
+                partner.order_frequency_score_text = "[No Sufficient Data]"
+                partner.order_frequency_score = 0
 
-            # Payment Behavior
-            overdue_invoices = partner.invoice_ids.filtered(
-                lambda i: i.state == 'posted' and 
-                i.payment_state in ('not_paid', 'partial') and 
+            # 2. Payment Behavior Score 
+            all_posted = partner.invoice_ids.filtered(lambda i: i.state == 'posted')
+            overdue_invoices= all_posted.filtered(
+                lambda i: i.payment_state in ('not_paid', 'partial') and 
                 i.invoice_date_due and i.invoice_date_due < fields.Date.today()
             )
-            if not partner.invoice_ids:
-                partner.payment_behavior_score = 0
+            
+            oldest_due_days = 0
+            if overdue_invoices:
+                oldest_due_date = min(overdue_invoices.mapped('invoice_date_due'))
+                oldest_due_days = (fields.Date.today() - oldest_due_date).days
+
+            if not all_posted:
+                partner.payment_behavior_status = 'good'
+                partner.payment_behavior_score = 100
+                partner.payment_delay_info = "No Invoice Found"
             else:
-                partner.payment_behavior_score = 100 if not overdue_invoices else 30
+                if oldest_due_days == 0:
+                    partner.payment_behavior_status = 'good'
+                    partner.payment_behavior_score = 100
+                    partner.payment_delay_info = "No Overdue"
+                elif oldest_due_days <= good_limit:
+                    partner.payment_behavior_status = 'good'
+                    partner.payment_behavior_score = 80
+                    partner.payment_delay_info = f"Oldest Due: {oldest_due_days} Days"
+                elif oldest_due_days <= avg_limit:
+                    partner.payment_behavior_status = 'average'
+                    partner.payment_behavior_score = 50
+                    partner.payment_delay_info = f"Oldest Due: {oldest_due_days} Days"
+                else:
+                    partner.payment_behavior_status = 'poor'
+                    partner.payment_behavior_score = 20
+                    partner.payment_delay_info = f"Critical Due: {oldest_due_days} Days"
 
 
     @api.depends('order_frequency_score', 'payment_behavior_score')
@@ -47,6 +101,7 @@ class ResPartner(models.Model):
                 (partner.payment_behavior_score * (w_payment / 100)) 
             )
             partner.health_score = total_score
+            partner.last_health_compute = fields.Datetime.now()
 
     @api.depends('health_score')
     def _compute_health_state(self):

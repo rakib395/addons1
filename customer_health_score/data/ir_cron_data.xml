@@ -8,6 +8,7 @@
             <field name="code">
 
 partners = model.search([])
+partners._compute_sub_scores()
 partners._compute_health_score()
 partners._compute_health_state()
 partners.write({'last_health_compute': datetime.datetime.now()})
