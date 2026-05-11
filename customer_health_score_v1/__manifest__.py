@@ -2,7 +2,7 @@
 # Part of Mehedi Hasan Rakib. See LICENSE file for full copyright and licensing details.
 {
 
-    'name': 'Health Score',
+    'name': 'Health Score v1',
     'version': '1.1',
     'summary': 'A simple tool to manage Customer Health Score.',
     'sequence': 2,
