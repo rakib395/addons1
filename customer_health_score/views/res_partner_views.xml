@@ -8,10 +8,10 @@
         <field name="arch" type="xml">
             <data>
                 <xpath expr="//notebook" position="inside">
-                    <page string="Health Score Details" name="health_details">
+                   <page string="Health Score Details" name="health_details">
                         <div class="row mt-3">
                             <div class="col-md-5 border-end text-center d-flex flex-column align-items-center justify-content-start">
-                                <h3 class="fw-bold text-dark mt-2 mb-0">Health Score</h3>
+                                <h3 class="fw-bold text-dark mt-2 mb-0">Overall Health Score</h3>
                                 
                                 <div class="py-2" style="min-height: 140px;">
                                     <field name="health_score" widget="gauge" options="{'max_value': 100, 'style': 'width:180px; height: 140px;'}"/>
@@ -35,9 +35,29 @@
 
                             <div class="col-md-7">
                                 <group string="Scoring Factors">
-                                    <field name="order_frequency_score" widget="progressbar" string="Order Frequency"/>
-                                    <field name="payment_behavior_score" widget="progressbar" string="Payment Behavior"/>
+                                    <label for="order_frequency_score_text" string="Order Frequency"/>
+                                    <div class="o_row">
+                                        <i class="fa fa-shopping-cart text-info me-2"/>
+                                        <field name="order_frequency_score_text" class="fw-bold text-info"/>
+                                    </div>
+
+                                    <label for="payment_behavior_score" string="Payment Behavior"/>
+                                    <div class="o_row">
+                                        <field name="payment_behavior_score" widget="progressbar" nolabel="1"/>
+                                        <field name="payment_behavior_status" widget="badge"
+                                            decoration-success="payment_behavior_status == 'good'"
+                                            decoration-warning="payment_behavior_status == 'average'"
+                                            decoration-danger="payment_behavior_status == 'poor'"/>
+                                    </div>
+                                    <div class="text-muted mt-1">
+                                        <field name="payment_delay_info" class="fw-bold"/>
+                                    </div>
                                 </group>
+
+                                <div class="alert alert-info mt-3" role="alert">
+                                    <i class="fa fa-info-circle me-1"/> 
+                                   These scores are calculated based on <strong>Real-time Overdue Invoices</strong> and <strong>Order History</strong>.
+                                </div>
                             </div>
                         </div>
                     </page>
@@ -90,10 +110,9 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.res_partner_kanban_view"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='display_name']" position="after">
-                <field name="health_state"/>
-            </xpath>
-
+          <xpath expr="//field[@name='display_name']" position="after">
+                <field name="health_state" invisible="1"/>
+            </xpath> 
             <xpath expr="//templates//field[@name='display_name']" position="after">
                 <div class="mt-1">
                     <field name="health_state" widget="badge"
